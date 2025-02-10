@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -40,7 +42,7 @@ class LoginPage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: Image.network(
-                            'https://cdn3d.iconscout.com/3d/free/thumb/free-google-3d-icon-download-in-png-blend-fbx-gltf-file-formats--social-media-logo-technology-ver-04-pack-logos-icons-10479106.png?f=webp', // Replaced phone icon with network image
+                            'https://cdn3d.iconscout.com/3d/free/thumb/free-google-3d-icon-download-in-png-blend-fbx-gltf-file-formats--social-media-logo-technology-ver-04-pack-logos-icons-10479106.png?f=webp',
                             height: 24,
                           ),
                         ),
@@ -51,7 +53,7 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                   onPressed: () {
-                    // Implement phone sign-in functionality
+                    signInWithGoogle();
                   },
                 ),
                 const SizedBox(height: 10),
@@ -79,9 +81,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  onPressed: () {
-                    // Implement phone sign-in functionality
-                  },
+                  onPressed: () {},
                 ),
               ],
             ),
@@ -91,4 +91,19 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
+
+  void signInWithGoogle() async {
+
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+  }
+
 }
