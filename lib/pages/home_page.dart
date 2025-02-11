@@ -1,11 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:foodie/pages/splash_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.userName});
+  const HomePage({super.key, this.userName, this.phone, required this.uid, this.photoUrl});
 
-  final String userName;
+  final String? userName;
+  final String? phone;
+  final String? photoUrl;
+  final String uid;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +32,12 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.green,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(userName,
+                  Text(userName ?? phone ?? 'Google user',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -42,7 +46,7 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    'ID410',
+                    uid,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -57,6 +61,7 @@ class HomePage extends StatelessWidget {
               onTap: () async {
                 await GoogleSignIn().signOut();
                 FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const SplashScreen()), (route) => false);
               },
             ),
           ],

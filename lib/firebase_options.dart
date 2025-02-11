@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '953243522027',
     projectId: 'foodie-8e7d4',
     storageBucket: 'foodie-8e7d4.firebasestorage.app',
+    androidClientId: '953243522027-2r7lmogntn31nv5dccbliennmb5lkd0n.apps.googleusercontent.com',
     iosClientId: '953243522027-uq7nvn1lnon62pifbaqvneeh12ldq2ud.apps.googleusercontent.com',
     iosBundleId: 'com.example.foodie',
   );
