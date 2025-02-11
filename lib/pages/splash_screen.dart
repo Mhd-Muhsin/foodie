@@ -19,7 +19,7 @@ class SplashScreen extends StatelessWidget {
               if(snapshot.data == null) {
                 return const LoginPage();
               } else {
-                return HomePage(userName: snapshot.data?.displayName ?? '', uid: snapshot.data?.uid ?? '', photoUrl: snapshot.data?.photoURL,);
+                return HomePage(userName: snapshot.data?.displayName, phone: snapshot.data?.phoneNumber, uid: snapshot.data?.uid ?? '', photoUrl: snapshot.data?.photoURL,);
               }
             }
             return const Center(child: CircularProgressIndicator());
