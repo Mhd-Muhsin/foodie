@@ -13,7 +13,7 @@ class FoodDataSource{
 
     try {
       final response = await client.get(
-            Uri.parse('https://faheemkodi.github.io/mock-menu-api/menuv.json'),
+            Uri.parse('https://faheemkodi.github.io/mock-menu-api/menu.json'),
           );
 
       if (response.statusCode == 200) {
