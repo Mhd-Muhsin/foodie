@@ -9,6 +9,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:provider/provider.dart';
 
+import 'order_summary_page.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({super.key, this.userName, this.phone, required this.uid, this.photoUrl});
 
@@ -28,7 +30,6 @@ class _HomePageState extends State<HomePage>  with SingleTickerProviderStateMixi
   void initState() {
     super.initState();
     Provider.of<FoodProvider>(context, listen: false).getCategoryList();
-    // _tabController = TabController(length: 6, vsync: this);
   }
 
   @override
@@ -58,11 +59,22 @@ class _HomePageState extends State<HomePage>  with SingleTickerProviderStateMixi
                   position: badges.BadgePosition.topEnd(top: 0, end: 3),
                   badgeContent: Text(
                       Provider.of<FoodProvider>(context, listen: true).cartDishes.length.toString(),
-                    style: TextStyle(color: Colors.white, fontSize: 10),
+                    style: const TextStyle(color: Colors.white, fontSize: 10),
                   ),
                   child: IconButton(
-                    icon: const Icon(Icons.shopping_cart),
-                    onPressed: () {},
+                    icon: Icon(Icons.shopping_cart, color: foodProvider.cartDishes.isEmpty ? Colors.grey : Colors.black,),
+                    onPressed: () {
+                      if(foodProvider.cartDishes.isNotEmpty){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const OrderSummaryPage()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Your cart is empty')),
+                        );
+                      }
+                    },
                   ),
                 ),
               ),
@@ -121,8 +133,8 @@ class _HomePageState extends State<HomePage>  with SingleTickerProviderStateMixi
                   ),
                   const SizedBox(height: 6),
                   ListTile(
-                    leading: const Icon(Icons.logout, color: Colors.blueGrey,),
-                    title: const Text('Log out', style: TextStyle(color: Colors.blueGrey),),
+                    leading: const Icon(Icons.logout, color: Colors.black54,),
+                    title: const Text('Log out', style: TextStyle(color: Colors.black54),),
                     onTap: () async {
                       await GoogleSignIn().signOut();
                       FirebaseAuth.instance.signOut();
@@ -136,7 +148,7 @@ class _HomePageState extends State<HomePage>  with SingleTickerProviderStateMixi
               ),
             ),
           ),
-          body: foodProvider.categoryList.isNotEmpty ? DefaultTabController(
+          body: !foodProvider.isLoading ? DefaultTabController(
             length: foodProvider.categoryList.length,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -162,7 +174,7 @@ class _HomePageState extends State<HomePage>  with SingleTickerProviderStateMixi
               ],
             ),
           )
-              : const Center(child: Text('No data to display'),),
+              : const Center(child: CircularProgressIndicator(),),
         );
       }
     );
