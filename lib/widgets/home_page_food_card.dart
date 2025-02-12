@@ -60,19 +60,18 @@ class _HomePageFoodCardState extends State<HomePageFoodCard> {
                       IconButton(
                         icon: const Icon(Icons.remove, color: Colors.white),
                         onPressed: () {
-                          Provider.of<FoodProvider>(context, listen: false).removeFromCart();
+                          Provider.of<FoodProvider>(context, listen: false).removeFromCart(widget.dish);
                         },
                       ),
                       const SizedBox(width: 4,),
-                      Text(
-                        Provider.of<FoodProvider>(context, listen: true).totalCartItemCount.toString(),
+                      Text(getCount(widget.dish.id),
                         style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(width: 4,),
                       IconButton(
                         icon: const Icon(Icons.add, color: Colors.white),
                         onPressed: () {
-                          Provider.of<FoodProvider>(context, listen: false).addToCart();
+                          Provider.of<FoodProvider>(context, listen: false).addToCart(widget.dish);
                         },
                       ),
                     ],
@@ -102,4 +101,10 @@ class _HomePageFoodCardState extends State<HomePageFoodCard> {
       ),
     );
   }
+
+  String getCount(int? dishId){
+    List<Dishes> cartDishes = Provider.of<FoodProvider>(context, listen: true).cartDishes;
+    return cartDishes.where((dish) => dish.id == dishId).toList().length.toString();
+  }
+
 }

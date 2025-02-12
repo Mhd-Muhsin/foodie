@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage>  with SingleTickerProviderStateMixi
                 child: badges.Badge(
                   position: badges.BadgePosition.topEnd(top: 0, end: 3),
                   badgeContent: Text(
-                      Provider.of<FoodProvider>(context, listen: true).totalCartItemCount.toString(),
+                      Provider.of<FoodProvider>(context, listen: true).cartDishes.length.toString(),
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                   child: IconButton(
