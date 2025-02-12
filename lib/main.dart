@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Foodie',
+        scaffoldMessengerKey: scaffoldMessengerKey,
         theme: ThemeData(
           primaryColor: Colors.green,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),

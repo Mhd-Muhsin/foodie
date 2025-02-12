@@ -148,7 +148,9 @@ class _HomePageState extends State<HomePage>  with SingleTickerProviderStateMixi
               ),
             ),
           ),
-          body: !foodProvider.isLoading ? DefaultTabController(
+          body: !foodProvider.isLoading ? foodProvider.categoryList.isEmpty ?
+          const Center(child: Text('No data to display'),) :
+          DefaultTabController(
             length: foodProvider.categoryList.length,
             child: Column(
               mainAxisSize: MainAxisSize.min,
