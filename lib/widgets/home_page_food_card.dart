@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:foodie/data/model/food_response.dart';
+import 'package:foodie/data/provider/food_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomePageFoodCard extends StatefulWidget {
-  const HomePageFoodCard({super.key});
+  const HomePageFoodCard({super.key, required this.dish});
+
+  final Dishes dish;
 
   @override
   _HomePageFoodCardState createState() => _HomePageFoodCardState();
 }
 
 class _HomePageFoodCardState extends State<HomePageFoodCard> {
-  int quantity = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -19,36 +23,36 @@ class _HomePageFoodCardState extends State<HomePageFoodCard> {
         children: [
           const Padding(
             padding: EdgeInsets.only(top: 4),
-            child: Icon(Icons.circle, color: Colors.red, size: 12), // Food type indicator
+            child: Icon(Icons.circle, color: Colors.red, size: 12),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Seafood Chowder",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                Text(
+                  widget.dish.name ?? 'Dish name',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("INR 12.00", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                    Text("30 calories", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    Text("INR ${widget.dish.price ?? '0'}", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    Text("${widget.dish.calories ?? '0'} calories", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  "With clams, scallops, and shrimp, Fresh spanish, mushrooms and hard-bolled eggs ",
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                Text(
+                  widget.dish.description ?? '',
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 const SizedBox(height: 8),
                 Container(
                   height: 40,
                   decoration: BoxDecoration(
                     color: Colors.green,
-                    borderRadius: BorderRadius.circular(30), // Rounded edges
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -56,30 +60,28 @@ class _HomePageFoodCardState extends State<HomePageFoodCard> {
                       IconButton(
                         icon: const Icon(Icons.remove, color: Colors.white),
                         onPressed: () {
-                          setState(() {
-                            if (quantity > 0) quantity--;
-                          });
+                          Provider.of<FoodProvider>(context, listen: false).removeFromCart();
                         },
                       ),
                       const SizedBox(width: 4,),
                       Text(
-                        "$quantity",
+                        Provider.of<FoodProvider>(context, listen: true).totalCartItemCount.toString(),
                         style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(width: 4,),
                       IconButton(
                         icon: const Icon(Icons.add, color: Colors.white),
                         onPressed: () {
-                          setState(() {
-                            quantity++;
-                          });
+                          Provider.of<FoodProvider>(context, listen: false).addToCart();
                         },
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 8),
-                const Text('Customizations Available', style: TextStyle(color: Colors.red),)
+                if(widget.dish.customizationsAvailable != null && widget.dish.customizationsAvailable!) ...[
+                  const SizedBox(height: 8),
+                  const Text('Customizations Available', style: TextStyle(color: Colors.red),)
+                ]
               ],
             ),
           ),
@@ -87,12 +89,12 @@ class _HomePageFoodCardState extends State<HomePageFoodCard> {
           ClipRRect(
             borderRadius: BorderRadius.circular(2),
             child: Image.network(
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrBwq1RrWCvEBjqWcXcvMGzk_4WBRFx2JRyg&s", // Replace with actual image URL
+                widget.dish.imageUrl ?? '',
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,
                 errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                  return const Icon(Icons.fastfood, size: 60, color: Colors.green,);
+                  return const Icon(Icons.fastfood, size: 60, color: Colors.orange,);
                 }
             ),
           ),
